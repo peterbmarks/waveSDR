@@ -30,6 +30,12 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
     private var frequencyStep:  Double      = 1.0
     private var _isRunning:     Bool        = false
     
+    // store these values to avoid accessing them off the main thread
+    private var viewWidth:              CGFloat      = 0.0
+    private var spectrogramViewHeight:  CGFloat = 0.0
+    private var analyzerViewHeight:     CGFloat = 0.0
+    private var analyzerViewWidth:      CGFloat = 0.0
+    
     var inSamples:              [Float]     = [] {
         didSet {
             updateDisplaySamples()
@@ -185,7 +191,7 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
         analyzerView.delegate = self
         spectrogramView.delegate = self
         self.view.addSubview(spectrumStackView)
-    
+        
     }
     
     //--------------------------------------------------------------------------
@@ -199,7 +205,20 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
         
         // build constraints
         setupConstraints()
-
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        updateStoredViewDimensions()
+    }
+    
+    func updateStoredViewDimensions() {
+        self.viewWidth = self.view.bounds.width
+        self.spectrogramViewHeight = self.spectrogramView.bounds.height
+        self.analyzerViewHeight = self.analyzerView.bounds.height
+        self.analyzerViewWidth = self.analyzerView.bounds.width
+        //print("Did: viewWidth = \(viewWidth)")
+        //print("spectrogramViewHeight = \(spectrogramViewHeight)")
     }
     
     //--------------------------------------------------------------------------
@@ -318,15 +337,15 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
         var i = 0
         
         if(displaySamples.count > 0) {
-            path.move(to: NSPoint(x: i, y: Int(self.analyzerView.bounds.height)))
+            path.move(to: NSPoint(x: i, y: Int(self.analyzerViewHeight)))
             for sample in displaySamples {
                 path.line(to: NSPoint(x:i, y:Int(abs(sample))))
                 i += 1
             }
 //            path.line(to:NSPoint(x: (i - 1), y: Int(self.analyzerView.bounds.height)))
     
-            let xScale: CGFloat = self.analyzerView.bounds.width  / CGFloat(displaySamples.count)
-            let yScale: CGFloat = self.analyzerView.bounds.height / 128.0 //CGFloat(pathSamples.max()!)//128.0
+            let xScale: CGFloat = self.analyzerViewWidth  / CGFloat(displaySamples.count)
+            let yScale: CGFloat = self.analyzerViewHeight / 128.0 //CGFloat(pathSamples.max()!)//128.0
             let scaleTransform  = AffineTransform(scaleByX: xScale, byY: yScale)
         
             path.transform(using: scaleTransform)
@@ -344,7 +363,7 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
     func buildSpectrogramImage() {
         
         self.inSamplesHistory.insert(self.inSamples, at: 0)
-        if self.inSamplesHistory.count > Int(self.spectrogramView.bounds.height) {
+        if self.inSamplesHistory.count > Int(self.spectrogramViewHeight) {
             _ = self.inSamplesHistory.popLast()
         }
 
@@ -373,36 +392,36 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
         
         
         pixelArray.insert(contentsOf: imageLine, at: 0)
-        let imageHeight = pixelArray.count / imageLine.count
-        if imageHeight > Int(self.spectrogramView.bounds.height) {
-            let heightDifference =  imageHeight - Int(self.spectrogramView.bounds.height)
-            let scrollLineStartIndex    = pixelArray.count - (heightDifference * imageLine.count)
-            let scrollLineEndIndex      = pixelArray.count
-            pixelArray.removeSubrange(scrollLineStartIndex..<scrollLineEndIndex)
+        if imageLine.count > 0 {
+            let imageHeight = pixelArray.count / imageLine.count
+            if imageHeight > Int(self.spectrogramViewHeight) {
+                let heightDifference =  imageHeight - Int(self.spectrogramViewHeight)
+                let scrollLineStartIndex    = pixelArray.count - (heightDifference * imageLine.count)
+                let scrollLineEndIndex      = pixelArray.count
+                pixelArray.removeSubrange(scrollLineStartIndex..<scrollLineEndIndex)
+            }
+        
+            let pixels: NSData = NSData(bytes: &pixelArray, length: pixelArray.count)
+            
+            let dataProvider    = CGDataProvider(data: pixels as CFData)
+            let colorSpace      = CGColorSpaceCreateDeviceRGB()
+            
+            let bitmapInfo      = CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue)
+            
+            self.spectrogramImage = CGImage(
+                width: imageWidth,
+                height: pixelArray.count / imageLine.count,
+                bitsPerComponent: 8,
+                bitsPerPixel: 32,
+                bytesPerRow: imageLine.count,
+                space: colorSpace,
+                bitmapInfo: bitmapInfo,
+                provider: dataProvider!,
+                decode: nil,
+                shouldInterpolate: true,
+                intent: CGColorRenderingIntent.defaultIntent
+            )!
         }
-        
-        
-        let pixels: NSData = NSData(bytes: &pixelArray, length: pixelArray.count)
-        
-        let dataProvider    = CGDataProvider(data: pixels as CFData)
-        let colorSpace      = CGColorSpaceCreateDeviceRGB()
-        
-        let bitmapInfo      = CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue)
-        
-        self.spectrogramImage = CGImage(
-            width: imageWidth,
-            height: pixelArray.count / imageLine.count,
-            bitsPerComponent: 8,
-            bitsPerPixel: 32,
-            bytesPerRow: imageLine.count,
-            space: colorSpace,
-            bitmapInfo: bitmapInfo,
-            provider: dataProvider!,
-            decode: nil,
-            shouldInterpolate: true,
-            intent: CGColorRenderingIntent.defaultIntent
-        )!
-        
     }
     
     //--------------------------------------------------------------------------
@@ -414,7 +433,7 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
     func updateDisplaySamples() {
 
         let bins = inSamples.count
-        let scaleWidthLog2  = Float(floor(log2(self.view.bounds.width)))
+        let scaleWidthLog2  = Float(floor(log2(self.viewWidth)))
         let scaleWidth      = Int(powf(2, scaleWidthLog2 + 1))
         let binsPerLine     = (Float(bins) / Float(scaleWidth))
         
@@ -754,7 +773,7 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
         
         analyzerTrackingArea = NSTrackingArea(rect: self.analyzerView.bounds, options: trackingAreaOptions, owner: self.analyzerView, userInfo: nil)
         self.analyzerView.addTrackingArea(analyzerTrackingArea)
-
+        updateStoredViewDimensions()
     }
     
     //--------------------------------------------------------------------------
@@ -764,6 +783,7 @@ class SpectrumViewController: NSViewController, AnalyzerViewDelegate, Spectrogra
     //--------------------------------------------------------------------------
 
     @objc func observedSpectrogramViewFrameDidChage() {
+        updateStoredViewDimensions()
         
         // get dimensions of spectrogramView
         let viewHeight = self.spectrogramView.bounds.height
