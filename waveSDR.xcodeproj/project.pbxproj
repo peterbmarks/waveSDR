@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72454AED2303946B00D2B947 /* objectDiagram.dot.txt in Resources */ = {isa = PBXBuildFile; fileRef = 72454AEC2303946B00D2B947 /* objectDiagram.dot.txt */; };
+		72454AEF230399C400D2B947 /* classDiagram.dot.txt in Resources */ = {isa = PBXBuildFile; fileRef = 72454AEE230399C400D2B947 /* classDiagram.dot.txt */; };
 		D0113F621E2F040500D668CC /* MainContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0113F611E2F040500D668CC /* MainContentViewController.swift */; };
 		D0113F651E2F140A00D668CC /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0113F641E2F140A00D668CC /* SidebarViewController.swift */; };
 		D0113F671E317DAB00D668CC /* HardwareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0113F661E317DAB00D668CC /* HardwareViewController.swift */; };
@@ -57,6 +59,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		72454AEC2303946B00D2B947 /* objectDiagram.dot.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = objectDiagram.dot.txt; sourceTree = "<group>"; };
+		72454AEE230399C400D2B947 /* classDiagram.dot.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = classDiagram.dot.txt; sourceTree = "<group>"; };
 		D0113F611E2F040500D668CC /* MainContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentViewController.swift; sourceTree = "<group>"; };
 		D0113F641E2F140A00D668CC /* SidebarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
 		D0113F661E317DAB00D668CC /* HardwareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwareViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +129,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		72454AEB2303944000D2B947 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				72454AEC2303946B00D2B947 /* objectDiagram.dot.txt */,
+				72454AEE230399C400D2B947 /* classDiagram.dot.txt */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
 		D054BFCC229CB091001604A3 /* BuildLog */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +151,7 @@
 		D05A115C1E258D4000F2116D = {
 			isa = PBXGroup;
 			children = (
+				72454AEB2303944000D2B947 /* Documentation */,
 				D054BFCC229CB091001604A3 /* BuildLog */,
 				D0302349227A0BA50016DF97 /* screenshot.png */,
 				D0EDB2B51F31949D00B84C4B /* Readme.md */,
@@ -377,10 +391,12 @@
 				D05A116B1E258D4000F2116D /* Assets.xcassets in Resources */,
 				D05A117D1E258D9800F2116D /* MainWindowController.xib in Resources */,
 				D0F098191E38525100355EB0 /* DVTStop_10_10.pdf in Resources */,
+				72454AED2303946B00D2B947 /* objectDiagram.dot.txt in Resources */,
 				D054BFD0229CB144001604A3 /* 20190512.md in Resources */,
 				D05A116E1E258D4000F2116D /* MainMenu.xib in Resources */,
 				D030234A227A0BA50016DF97 /* screenshot.png in Resources */,
 				D054BFD2229CB1B2001604A3 /* 20190514.md in Resources */,
+				72454AEF230399C400D2B947 /* classDiagram.dot.txt in Resources */,
 				D0F098181E38525100355EB0 /* DVTRun_10_10.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

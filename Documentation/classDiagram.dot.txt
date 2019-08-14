@@ -1,0 +1,30 @@
+// To understand the code, we can draw a class diagram
+// Arrow points to superclass
+// and have graphVis draw it to a pdf:
+// dot -Tpdf -O classDiagram.dot.txt ;open classDiagram.dot.txt.pdf
+
+digraph D {
+node [shape=box];
+
+AppDelegate -> WindowControllers
+
+SoftwareDefinedRadio -> {SDRDeviceDelegate, USBManagerDelegate}
+Radio -> RadioBlock
+AMDemodulatorBlock -> RadioBlock
+FMDemodulatorBlock -> RadioBlock
+ComplexFilterBlock -> RadioBlock
+FFTBlock -> RadioBlock
+FilterBlock -> RadioBlock
+MixerBlock -> RadioBlock
+ToneDecoderBlock -> RadioBlock
+
+LevelIndicatorWithSquelch -> NSLevelIndicator
+RadioDisplayViewController -> NSViewController
+RTLKnownDevices -> USBDevice
+USBManager
+Samples
+SDRDevice -> SDRDeviceProtocol
+SpectrumViewController -> {NSViewController, AnalyzerViewDelegate, SpectrogramViewDelegate}
+
+}
+

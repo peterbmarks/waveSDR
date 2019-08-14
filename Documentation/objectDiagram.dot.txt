@@ -1,0 +1,26 @@
+// To understand the code, we can draw an object diagram
+// and have graphVis draw it to a pdf:
+// dot -Tpdf -O objectDiagram.dot.txt ;open objectDiagram.dot.txt.pdf
+
+digraph D {
+node [shape=box];
+
+AppDelegate -> WindowControllers
+
+MainWindowController -> SoftwareDefinedRadio
+MainWindowController -> RadioDisplayViewController
+MainWindowController -> SpectrumViewController
+MainWindowController -> SidebarViewController
+MainWindowController -> HardwareViewController
+MainWindowController -> TunerViewController
+MainWindowController -> AudioOutViewController
+
+SoftwareDefinedRadio -> SDRDevice
+
+RadioDisplayViewController -> SDRDevice
+RadioDisplayViewController -> LevelIndicatorWithSquelch
+LevelIndicatorWithSquelch -> squelchValue
+
+SDRDevice -> USBDevice
+
+}
