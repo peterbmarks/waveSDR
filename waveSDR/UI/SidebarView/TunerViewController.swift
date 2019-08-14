@@ -84,7 +84,7 @@ class TunerViewController: DisclosureViewController {
         let formatter = NumberFormatter()
         formatter.format = "0,000,000,000"
         formatter.numberStyle = NumberFormatter.Style.none
-        //formatter.thousandSeparator = "."
+        formatter.thousandSeparator = "."
         return formatter
     }()
     

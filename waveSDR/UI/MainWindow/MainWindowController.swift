@@ -116,8 +116,8 @@ class MainWindowController: NSWindowController {
         //
         // TODO: replace with NSUserDefaults
         // setup some start-up values
-        tunerViewController.tunedFrequency      = 162550000
-        tunerViewController.demodSelected       = 1
+        tunerViewController.tunedFrequency      = 102000000 // FM broadcast band
+        tunerViewController.demodSelected       = 0 // wideband FM
         tunerViewController.selectedStepBase    = "kHz"
         tunerViewController.selectedStepSize    = 1
         audioOutViewController.highPassCutoff   = 300

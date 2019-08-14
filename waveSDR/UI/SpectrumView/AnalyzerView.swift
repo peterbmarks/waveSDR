@@ -364,7 +364,7 @@ class AnalyzerView: NSView {
     //--------------------------------------------------------------------------
 
     override func scrollWheel(with event: NSEvent) {
-        print(event)
+        //print(event)
         if(event.phase == NSEvent.Phase.began) {
             if(self.mouseLineTimer.isValid == true) {
                 self.mouseLineTimer.invalidate()
