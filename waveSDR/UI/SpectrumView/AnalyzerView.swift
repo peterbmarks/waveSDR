@@ -364,7 +364,7 @@ class AnalyzerView: NSView {
     //--------------------------------------------------------------------------
 
     override func scrollWheel(with event: NSEvent) {
-        
+        print(event)
         if(event.phase == NSEvent.Phase.began) {
             if(self.mouseLineTimer.isValid == true) {
                 self.mouseLineTimer.invalidate()
@@ -393,10 +393,11 @@ class AnalyzerView: NSView {
             )
         }
 
-        let scrollSpeed = Int(ceil(abs(event.deltaX / 2.0)))
-        if (event.deltaX < 0) {
+        let scrollSpeed = Int(ceil(abs(event.deltaY / 2.0)))
+        // print("scrollSpeed = \(scrollSpeed)")
+        if (event.deltaY < 0) {
             self.delegate.requestFrequencyChangeWithScrollSpeed(scrollSpeed)
-        } else if (event.deltaX > 0) {
+        } else if (event.deltaY > 0) {
             self.delegate.requestFrequencyChangeWithScrollSpeed(-scrollSpeed)
         }
     
