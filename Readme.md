@@ -2,6 +2,8 @@
 
 A macOS native desktop Software Defined Radio application using the RTL-SDR USB device.
 
+## Sep 2020 - forked by Peter Marks
+
 <> May 2019 <>
  
 I have started a simple build log which can be found in the project's root directory, more as notes to myself, but also as a means of thinking through my design choices and documenting them for future reference.  Eventually my build log will become posts on my wordpress site. 
